@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración Laborde</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        ::placeholder { color: #9ca3af; }
+        .modal-overlay { transition: opacity 0.3s ease; }
+        .modal-container { transition: all 0.3s ease; }
+        .modal-hidden { opacity: 0; pointer-events: none; }
+        .modal-visible { opacity: 1; pointer-events: auto; }
+        .modal-container-hidden { transform: scale(0.95); }
+        .modal-container-visible { transform: scale(1); }
+        .filter-btn-active {
+            background-color: #4f46e5;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Pantalla de Login -->
+    <div id="login-screen" class="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+        <div class="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
+            <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Acceso Administrativo</h2>
+            <form id="login-form">
+                <div class="mb-4">
+                    <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+                    <input type="password" id="password" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <p id="login-error" class="text-red-500 text-sm text-center mb-4 hidden"></p>
+                <button type="submit" class="w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-indigo-700">Entrar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Contenido principal de la aplicación -->
+    <div id="app-content" class="container mx-auto p-4 sm:p-6 lg:p-8 hidden">
+        <header class="text-center mb-8">
+            <div class="flex justify-between items-center">
+                <div></div>
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Módulo de Cursos</h1>
+                <button id="logout-btn" class="bg-red-500 text-white text-sm font-semibold py-1 px-3 rounded-md hover:bg-red-600">Salir</button>
+            </div>
+            <p class="text-md text-gray-600 mt-2">Registra y organiza tus cursos.</p>
+        </header>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <aside class="lg:col-span-1 bg-white p-6 rounded-lg shadow-md h-fit">
+                <h2 class="text-xl font-bold mb-4">Añadir Nuevo Registro</h2>
+                <form id="course-form" class="space-y-4">
+                    <div>
+                        <label for="courseName" class="block text-sm font-medium text-gray-700">Nombre del Curso</label>
+                        <input type="text" id="courseName" placeholder="Ej: Curso Marco Legal" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                    </div>
+                    <div>
+                        <label for="courseModule" class="block text-sm font-medium text-gray-700">Módulo</label>
+                        <input type="number" id="courseModule" placeholder="Ej: 1" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                    </div>
+                    <div>
+                        <label for="coursePart" class="block text-sm font-medium text-gray-700">Parte del Módulo</label>
+                        <input type="text" id="coursePart" placeholder="Ej: 1ra. Parte" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                    </div>
+                    <div>
+                        <label for="courseDate" class="block text-sm font-medium text-gray-700">Fecha de Impartición</label>
+                        <input type="date" id="courseDate" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                    </div>
+                    <div>
+                        <label for="coursePrice" class="block text-sm font-medium text-gray-700">Precio (MXN)</label>
+                        <input type="number" id="coursePrice" placeholder="Ej: 1500" step="0.01" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                    </div>
+                    <button type="submit" class="w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-indigo-700">Añadir Curso</button>
+                </form>
+            </aside>
+            <main class="lg:col-span-2 bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-bold mb-4">Mis Cursos Registrados</h2>
+                
+                <!-- Barra de Filtros Actualizada -->
+                <div class="mb-4 p-4 bg-gray-50 rounded-lg space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="search-input" class="block text-sm font-medium text-gray-700 mb-1">Buscar por Nombre</label>
+                            <input type="text" id="search-input" placeholder="Escribe para buscar..." class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Filtrar por Fecha</label>
+                            <div class="flex items-center gap-2">
+                                <input type="date" id="start-date-filter" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm">
+                                <span class="text-gray-500">-</span>
+                                <input type="date" id="end-date-filter" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm">
+                                <button id="clear-dates-btn" title="Limpiar fechas" class="p-2 bg-gray-200 rounded-md hover:bg-gray-300">
+                                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span class="text-sm font-medium text-gray-700">Estatus:</span>
+                        <div class="flex items-center space-x-2" id="status-filters">
+                            <button data-status="all" class="filter-btn filter-btn-active px-3 py-1 text-sm font-semibold rounded-md">Todos</button>
+                            <button data-status="completed" class="filter-btn px-3 py-1 text-sm font-semibold text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-md">Completados</button>
+                            <button data-status="future" class="filter-btn px-3 py-1 text-sm font-semibold text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-md">Futuros</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase">Curso</th>
+                                <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase">Módulo</th>
+                                <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase">Parte</th>
+                                <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase">Fecha</th>
+                                <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase">Estatus</th>
+                                <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase">Precio</th>
+                                <th class="relative px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="course-list" class="bg-white divide-y divide-gray-200"></tbody>
+                    </table>
+                     <p id="empty-state" class="text-center text-gray-500 py-8 hidden">No hay cursos que coincidan con los filtros.</p>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal de Edición -->
+    <div id="edit-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 modal-hidden">
+        <div id="edit-modal-container" class="bg-white w-full max-w-md p-6 rounded-lg shadow-xl modal-container-hidden">
+            <h2 class="text-xl font-bold mb-4">Editar Curso</h2>
+            <form id="edit-form">
+                <input type="hidden" id="edit-course-id">
+                <div class="space-y-4">
+                     <div>
+                        <label for="edit-courseName" class="block text-sm font-medium text-gray-700">Nombre del Curso</label>
+                        <input type="text" id="edit-courseName" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
+                    </div>
+                    <div>
+                        <label for="edit-courseModule" class="block text-sm font-medium text-gray-700">Módulo</label>
+                        <input type="number" id="edit-courseModule" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
+                    </div>
+                    <div>
+                        <label for="edit-coursePart" class="block text-sm font-medium text-gray-700">Parte del Módulo</label>
+                        <input type="text" id="edit-coursePart" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
+                    </div>
+                    <div>
+                        <label for="edit-courseDate" class="block text-sm font-medium text-gray-700">Fecha de Impartición</label>
+                        <input type="date" id="edit-courseDate" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
+                    </div>
+                    <div>
+                        <label for="edit-coursePrice" class="block text-sm font-medium text-gray-700">Precio (MXN)</label>
+                        <input type="number" id="edit-coursePrice" step="0.01" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-end space-x-3">
+                    <button type="button" id="cancel-edit-btn" class="bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-md hover:bg-gray-300">Cancelar</button>
+                    <button type="submit" class="bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-indigo-700">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- Referencias al DOM ---
+        const loginScreen = document.getElementById('login-screen');
+        const appContent = document.getElementById('app-content');
+        const loginForm = document.getElementById('login-form');
+        const passwordInput = document.getElementById('password');
+        const loginError = document.getElementById('login-error');
+        const courseForm = document.getElementById('course-form');
+        const courseList = document.getElementById('course-list');
+        const emptyState = document.getElementById('empty-state');
+        const logoutBtn = document.getElementById('logout-btn');
+        const editModal = document.getElementById('edit-modal');
+        const editModalContainer = document.getElementById('edit-modal-container');
+        const editForm = document.getElementById('edit-form');
+        const cancelEditBtn = document.getElementById('cancel-edit-btn');
+        const editCourseId = document.getElementById('edit-course-id');
+        const searchInput = document.getElementById('search-input');
+        const statusFilters = document.getElementById('status-filters');
+        // NUEVAS REFERENCIAS
+        const startDateFilter = document.getElementById('start-date-filter');
+        const endDateFilter = document.getElementById('end-date-filter');
+        const clearDatesBtn = document.getElementById('clear-dates-btn');
+
+        const apiUrl = 'http://localhost:3000/api';
+        let localCourses = [];
+
+        // --- Funciones de Autenticación y UI (sin cambios) ---
+        const showApp = () => { loginScreen.classList.add('hidden'); appContent.classList.remove('hidden'); };
+        const showLogin = () => { sessionStorage.removeItem('authToken'); loginScreen.classList.remove('hidden'); appContent.classList.add('hidden'); passwordInput.value = ''; };
+        const getAuthHeaders = () => { const token = sessionStorage.getItem('authToken'); return { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }; };
+
+        // --- Funciones del Modal (sin cambios) ---
+        const openEditModal = (course) => {
+            editCourseId.value = course.id;
+            document.getElementById('edit-courseName').value = course.name;
+            document.getElementById('edit-courseModule').value = course.module;
+            document.getElementById('edit-coursePart').value = course.part;
+            document.getElementById('edit-courseDate').value = course.date;
+            document.getElementById('edit-coursePrice').value = course.price;
+            editModal.classList.remove('modal-hidden'); editModal.classList.add('modal-visible');
+            editModalContainer.classList.remove('modal-container-hidden'); editModalContainer.classList.add('modal-container-visible');
+        };
+        const closeEditModal = () => {
+            editModal.classList.add('modal-hidden'); editModal.classList.remove('modal-visible');
+            editModalContainer.classList.add('modal-container-hidden'); editModalContainer.classList.remove('modal-container-visible');
+        };
+
+        // --- Lógica Principal (CRUD y Filtros) ---
+        const renderCourses = async (fetchNew = false) => {
+            try {
+                if (fetchNew) {
+                    const response = await fetch(`${apiUrl}/courses`, { headers: getAuthHeaders() });
+                    if (!response.ok) { if (response.status === 403) showLogin(); throw new Error('Auth failed'); }
+                    localCourses = await response.json();
+                }
+
+                // --- Lógica de Filtros Actualizada ---
+                const searchTerm = searchInput.value.toLowerCase();
+                const activeStatusFilter = statusFilters.querySelector('.filter-btn-active').dataset.status;
+                const startDate = startDateFilter.value;
+                const endDate = endDateFilter.value;
+
+                let filteredCourses = localCourses.filter(course => {
+                    // 1. Filtro por nombre
+                    const nameMatch = (course.name || '').toLowerCase().includes(searchTerm);
+                    if (!nameMatch) return false;
+
+                    // 2. Filtro por estatus
+                    const today = new Date(); today.setHours(0, 0, 0, 0);
+                    const courseDateForStatus = course.date ? new Date(course.date + 'T00:00:00-06:00') : null;
+                    if (activeStatusFilter !== 'all') {
+                        if (!courseDateForStatus) return false;
+                        const isCompleted = courseDateForStatus < today;
+                        if (activeStatusFilter === 'completed' && !isCompleted) return false;
+                        if (activeStatusFilter === 'future' && isCompleted) return false;
+                    }
+
+                    // 3. Filtro por rango de fechas
+                    if (startDate && (!course.date || course.date < startDate)) {
+                        return false;
+                    }
+                    if (endDate && (!course.date || course.date > endDate)) {
+                        return false;
+                    }
+                    
+                    return true;
+                });
+
+                courseList.innerHTML = '';
+                emptyState.textContent = 'No hay cursos que coincidan con los filtros.';
+                if (localCourses.length === 0) {
+                    emptyState.textContent = 'Aún no has añadido ningún curso.';
+                }
+                emptyState.classList.toggle('hidden', filteredCourses.length > 0 || (localCourses.length === 0 && filteredCourses.length === 0));
+
+
+                const sortedCourses = [...filteredCourses].sort((a, b) => { const dateA = a.date ? new Date(a.date) : 0; const dateB = b.date ? new Date(b.date) : 0; return dateB - dateA; });
+
+                sortedCourses.forEach(course => {
+                    const row = document.createElement('tr');
+                    const courseDate = course.date ? new Date(course.date + 'T00:00:00-06:00') : null;
+                    
+                    let statusBadge = `<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Sin Fecha</span>`;
+                    if (courseDate) {
+                        const isCompleted = courseDate < new Date(new Date().setHours(0,0,0,0));
+                        statusBadge = isCompleted 
+                            ? `<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Completado</span>`
+                            : `<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Futuro</span>`;
+                    }
+                    
+                    const formattedDate = courseDate ? courseDate.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' }) : 'N/A';
+                    const formattedPrice = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(course.price || 0);
+
+                    row.innerHTML = `
+                        <td class="px-3 py-4 text-sm font-medium text-gray-900">${course.name || 'N/A'}</td>
+                        <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500">${course.module || 'N/A'}</td>
+                        <td class="px-3 py-4 text-sm text-gray-500">${course.part || 'N/A'}</td>
+                        <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500">${formattedDate}</td>
+                        <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500">${statusBadge}</td>
+                        <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500">${formattedPrice}</td>
+                        <td class="px-3 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <button data-id="${course.id}" class="edit-btn text-indigo-600 hover:text-indigo-900 mr-3">Editar</button>
+                            <button data-id="${course.id}" class="delete-btn text-red-600 hover:text-red-900">Eliminar</button>
+                        </td>`;
+                    courseList.appendChild(row);
+                });
+            } catch (error) { console.error('Error al cargar cursos:', error); }
+        };
+
+        // --- Event Listeners ---
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            loginError.classList.add('hidden');
+            try {
+                const response = await fetch(`${apiUrl}/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: passwordInput.value }) });
+                const data = await response.json();
+                if (response.ok) { sessionStorage.setItem('authToken', data.token); showApp(); renderCourses(true); } 
+                else { loginError.textContent = data.message || 'Error.'; loginError.classList.remove('hidden'); }
+            } catch (error) { loginError.textContent = 'No se pudo conectar con el servidor.'; loginError.classList.remove('hidden'); }
+        });
+
+        logoutBtn.addEventListener('click', showLogin);
+
+        courseForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const newCourse = { name: document.getElementById('courseName').value, module: document.getElementById('courseModule').value, part: document.getElementById('coursePart').value, date: document.getElementById('courseDate').value, price: document.getElementById('coursePrice').value, };
+            await fetch(`${apiUrl}/courses`, { method: 'POST', headers: getAuthHeaders(), body: JSON.stringify(newCourse), });
+            renderCourses(true); courseForm.reset();
+        });
+
+        courseList.addEventListener('click', async (e) => {
+            const courseId = e.target.getAttribute('data-id');
+            if (!courseId) return;
+            if (e.target.classList.contains('edit-btn')) { const courseToEdit = localCourses.find(c => c.id === parseInt(courseId)); if (courseToEdit) openEditModal(courseToEdit); }
+            if (e.target.classList.contains('delete-btn')) { 
+                const modal = document.createElement('div');
+                modal.innerHTML = `
+                    <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000;">
+                        <div style="background: white; padding: 20px; border-radius: 8px; text-align: center;">
+                            <p>¿Estás seguro de que quieres eliminar este curso?</p>
+                            <button id="confirm-delete" style="margin-top: 20px; padding: 8px 16px; background: #dc2626; color: white; border: none; border-radius: 4px; cursor: pointer;">Sí, eliminar</button>
+                            <button id="cancel-delete" style="margin-left: 10px; padding: 8px 16px; background: #e5e7eb; border: none; border-radius: 4px; cursor: pointer;">Cancelar</button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+                document.getElementById('confirm-delete').onclick = async () => {
+                    await fetch(`${apiUrl}/courses/${courseId}`, { method: 'DELETE', headers: getAuthHeaders() }); 
+                    renderCourses(true);
+                    document.body.removeChild(modal);
+                };
+                document.getElementById('cancel-delete').onclick = () => {
+                    document.body.removeChild(modal);
+                };
+            }
+        });
+
+        editForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const courseId = editCourseId.value;
+            const updatedCourse = { name: document.getElementById('edit-courseName').value, module: document.getElementById('edit-courseModule').value, part: document.getElementById('edit-coursePart').value, date: document.getElementById('edit-courseDate').value, price: document.getElementById('edit-coursePrice').value, };
+            await fetch(`${apiUrl}/courses/${courseId}`, { method: 'PUT', headers: getAuthHeaders(), body: JSON.stringify(updatedCourse), });
+            closeEditModal(); renderCourses(true);
+        });
+
+        cancelEditBtn.addEventListener('click', closeEditModal);
+        editModal.addEventListener('click', (e) => { if (e.target === editModal) closeEditModal(); });
+
+        // Event Listeners para Filtros
+        searchInput.addEventListener('input', () => renderCourses(false));
+        statusFilters.addEventListener('click', (e) => {
+            if (e.target.classList.contains('filter-btn')) {
+                const activeButton = statusFilters.querySelector('.filter-btn-active');
+                if(activeButton) {
+                    activeButton.classList.remove('filter-btn-active', 'bg-indigo-600', 'text-white');
+                    activeButton.classList.add('text-gray-600', 'bg-gray-200', 'hover:bg-gray-300');
+                }
+                e.target.classList.add('filter-btn-active', 'bg-indigo-600', 'text-white');
+                e.target.classList.remove('text-gray-600', 'bg-gray-200', 'hover:bg-gray-300');
+                renderCourses(false);
+            }
+        });
+        startDateFilter.addEventListener('input', () => renderCourses(false));
+        endDateFilter.addEventListener('input', () => renderCourses(false));
+        clearDatesBtn.addEventListener('click', () => {
+            startDateFilter.value = '';
+            endDateFilter.value = '';
+            renderCourses(false);
+        });
+
+        // --- Inicialización ---
+        const initializeApp = async () => { if (sessionStorage.getItem('authToken')) { showApp(); await renderCourses(true); } }
+        initializeApp();
+    });
+    </script>
+</body>
+</html>
