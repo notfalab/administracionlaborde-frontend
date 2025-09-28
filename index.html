@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
-        .input { @apply mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500; }
         .th { @apply px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider; }
         .td { @apply px-2 py-4 text-sm; }
         .btn-primary { @apply w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-indigo-700; }
@@ -20,14 +19,14 @@
 </head>
 <body class="bg-gray-100">
 
-    <!-- Pantalla de Login -->
+    <!-- Pantalla de Login (Diseño Corregido) -->
     <div id="login-screen" class="min-h-screen flex items-center justify-center bg-gray-100 p-4">
         <div class="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
             <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Acceso Administrativo</h2>
             <form id="login-form">
                 <div class="mb-4">
                     <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
-                    <input type="password" id="password" required class="input">
+                    <input type="password" id="password" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                 </div>
                 <p id="login-error" class="text-red-500 text-sm text-center mb-4 hidden"></p>
                 <button type="submit" class="w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-indigo-700">Entrar</button>
@@ -51,7 +50,7 @@
 
         <div class="container mx-auto p-4 sm:p-6 lg:p-8">
             
-            <!-- MÓDULO DE CURSOS (Reactivado y Completo) -->
+            <!-- MÓDULO DE CURSOS (Diseño Corregido) -->
             <div id="module-courses" class="module-view hidden">
                 <header class="text-center mb-8">
                     <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Módulo de Cursos</h1>
@@ -62,11 +61,11 @@
                         <h2 class="text-xl font-bold mb-4">Añadir / Editar Curso</h2>
                         <form id="course-form" class="space-y-4">
                             <input type="hidden" id="course-id">
-                            <div><label for="courseName" class="text-sm font-medium">Nombre del Curso</label><input type="text" id="courseName" class="input"></div>
-                            <div><label for="courseModule" class="text-sm font-medium">Módulo</label><input type="number" id="courseModule" class="input"></div>
-                            <div><label for="coursePart" class="text-sm font-medium">Parte del Módulo</label><input type="text" id="coursePart" class="input"></div>
-                            <div><label for="courseDate" class="text-sm font-medium">Fecha de Impartición</label><input type="date" id="courseDate" class="input"></div>
-                            <div><label for="coursePrice" class="text-sm font-medium">Precio (MXN)</label><input type="number" id="coursePrice" step="0.01" class="input"></div>
+                            <div><label for="courseName" class="block text-sm font-medium text-gray-700">Nombre del Curso</label><input type="text" id="courseName" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></div>
+                            <div><label for="courseModule" class="block text-sm font-medium text-gray-700">Módulo</label><input type="number" id="courseModule" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></div>
+                            <div><label for="coursePart" class="block text-sm font-medium text-gray-700">Parte del Módulo</label><input type="text" id="coursePart" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></div>
+                            <div><label for="courseDate" class="block text-sm font-medium text-gray-700">Fecha de Impartición</label><input type="date" id="courseDate" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></div>
+                            <div><label for="coursePrice" class="block text-sm font-medium text-gray-700">Precio (MXN)</label><input type="number" id="coursePrice" step="0.01" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></div>
                             <div class="flex space-x-2">
                                 <button type="submit" class="btn-primary flex-1">Guardar</button>
                                 <button type="button" id="clear-course-form-btn" class="bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-md hover:bg-gray-300 flex-1">Limpiar</button>
@@ -75,20 +74,19 @@
                     </aside>
                     <main class="lg:col-span-2 bg-white p-6 rounded-lg shadow-md">
                         <h2 class="text-xl font-bold mb-4">Mis Cursos Registrados</h2>
-                        <!-- Filtros para Cursos -->
                         <div class="mb-4 p-4 bg-gray-50 rounded-lg space-y-4">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label for="course-search-input" class="block text-sm font-medium text-gray-700 mb-1">Buscar por Nombre</label>
-                                    <input type="text" id="course-search-input" placeholder="Escribe para buscar..." class="w-full input">
+                                    <input type="text" id="course-search-input" placeholder="Escribe para buscar..." class="w-full mt-1 block px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Filtrar por Fecha</label>
                                     <div class="flex items-center gap-2">
-                                        <input type="date" id="course-start-date-filter" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm">
+                                        <input type="date" id="course-start-date-filter" class="w-full mt-1 block px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                                         <span class="text-gray-500">-</span>
-                                        <input type="date" id="course-end-date-filter" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm">
-                                        <button id="course-clear-dates-btn" title="Limpiar fechas" class="p-2 bg-gray-200 rounded-md hover:bg-gray-300">
+                                        <input type="date" id="course-end-date-filter" class="w-full mt-1 block px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                        <button id="course-clear-dates-btn" title="Limpiar fechas" class="p-2 bg-gray-200 rounded-md hover:bg-gray-300 mt-1">
                                             <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                                         </button>
                                     </div>
@@ -118,7 +116,7 @@
                 </div>
             </div>
 
-            <!-- MÓDULO DE PÓLIZAS -->
+            <!-- MÓDULO DE PÓLIZAS (Diseño Corregido) -->
             <div id="module-policies" class="module-view hidden">
                  <header class="text-center mb-8">
                     <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Módulo de Pólizas</h1>
@@ -129,20 +127,20 @@
                         <h2 class="text-xl font-bold mb-4">Añadir / Editar Póliza</h2>
                         <form id="policy-form" class="space-y-4">
                             <input type="hidden" id="policy-id">
-                            <div><label for="policyNumber" class="text-sm font-medium">No. de Póliza</label><input type="text" id="policyNumber" class="input"></div>
-                            <div><label for="policyHolder" class="text-sm font-medium">Nombre del Asegurado</label><input type="text" id="policyHolder" class="input"></div>
-                            <div><label for="insuredItem" class="text-sm font-medium">Bien Asegurado</label><input type="text" id="insuredItem" placeholder="Ej: Jetta 2022" class="input"></div>
-                            <div><label for="company" class="text-sm font-medium">Compañía</label><input type="text" id="company" placeholder="Ej: Quálitas, HDI" class="input"></div>
-                            <div><label for="startDate" class="text-sm font-medium">Fecha Inicial</label><input type="date" id="startDate" class="input"></div>
-                            <div><label for="renewalDate" class="text-sm font-medium">Fecha de Renovación</label><input type="date" id="renewalDate" class="input"></div>
-                            <div><label for="paymentMethod" class="text-sm font-medium">Forma de Pago</label>
-                                <select id="paymentMethod" class="input"><option value="">Seleccionar...</option><option value="ANUAL">ANUAL</option><option value="SEMESTRAL">SEMESTRAL</option><option value="TRIMESTRAL">TRIMESTRAL</option><option value="MENSUAL">MENSUAL</option></select>
+                            <div><label for="policyNumber" class="block text-sm font-medium text-gray-700">No. de Póliza</label><input type="text" id="policyNumber" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></div>
+                            <div><label for="policyHolder" class="block text-sm font-medium text-gray-700">Nombre del Asegurado</label><input type="text" id="policyHolder" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></div>
+                            <div><label for="insuredItem" class="block text-sm font-medium text-gray-700">Bien Asegurado</label><input type="text" id="insuredItem" placeholder="Ej: Jetta 2022" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></div>
+                            <div><label for="company" class="block text-sm font-medium text-gray-700">Compañía</label><input type="text" id="company" placeholder="Ej: Quálitas, HDI" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></div>
+                            <div><label for="startDate" class="block text-sm font-medium text-gray-700">Fecha Inicial</label><input type="date" id="startDate" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></div>
+                            <div><label for="renewalDate" class="block text-sm font-medium text-gray-700">Fecha de Renovación</label><input type="date" id="renewalDate" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></div>
+                            <div><label for="paymentMethod" class="block text-sm font-medium text-gray-700">Forma de Pago</label>
+                                <select id="paymentMethod" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"><option value="">Seleccionar...</option><option value="ANUAL">ANUAL</option><option value="SEMESTRAL">SEMESTRAL</option><option value="TRIMESTRAL">TRIMESTRAL</option><option value="MENSUAL">MENSUAL</option></select>
                             </div>
-                            <div><label for="paymentDetails" class="text-sm font-medium">Pagos</label><input type="text" id="paymentDetails" placeholder="Ej: 1/1, 3/12, Pagado" class="input"></div>
-                            <div><label for="category" class="text-sm font-medium">Categoría</label>
-                                <select id="category" class="input"><option value="">Seleccionar...</option><option value="AUTOS">AUTOS</option><option value="CAMIONES">CAMIONES</option><option value="VIDA">VIDA</option><option value="GASTOS MEDICOS">GASTOS MEDICOS</option><option value="ACCIDENTES PERSONALES">ACCIDENTES PERSONALES</option><option value="HOGAR">HOGAR</option><option value="PYME">PYME</option><option value="RC">RC</option><option value="DIVERSOS">DIVERSOS</option></select>
+                            <div><label for="paymentDetails" class="block text-sm font-medium text-gray-700">Pagos</label><input type="text" id="paymentDetails" placeholder="Ej: 1/1, 3/12, Pagado" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></div>
+                            <div><label for="category" class="block text-sm font-medium text-gray-700">Categoría</label>
+                                <select id="category" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"><option value="">Seleccionar...</option><option value="AUTOS">AUTOS</option><option value="CAMIONES">CAMIONES</option><option value="VIDA">VIDA</option><option value="GASTOS MEDICOS">GASTOS MEDICOS</option><option value="ACCIDENTES PERSONALES">ACCIDENTES PERSONALES</option><option value="HOGAR">HOGAR</option><option value="PYME">PYME</option><option value="RC">RC</option><option value="DIVERSOS">DIVERSOS</option></select>
                             </div>
-                            <div><label for="premiumAmount" class="text-sm font-medium">Monto de la Prima (MXN)</label><input type="number" id="premiumAmount" step="0.01" class="input"></div>
+                            <div><label for="premiumAmount" class="block text-sm font-medium text-gray-700">Monto de la Prima (MXN)</label><input type="number" id="premiumAmount" step="0.01" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></div>
                             <div class="flex space-x-2">
                                 <button type="submit" class="btn-primary flex-1">Guardar</button>
                                 <button type="button" id="clear-policy-form-btn" class="bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-md hover:bg-gray-300 flex-1">Limpiar</button>
@@ -152,7 +150,8 @@
                     <main class="lg:col-span-2 bg-white p-6 rounded-lg shadow-md">
                         <h2 class="text-xl font-bold mb-4">Listado de Pólizas</h2>
                         <div class="mb-4 p-4 bg-gray-50 rounded-lg">
-                            <input type="text" id="policy-search-input" placeholder="Buscar por asegurado, póliza, compañía..." class="w-full input">
+                            <label for="policy-search-input" class="block text-sm font-medium text-gray-700 mb-1">Buscar</label>
+                            <input type="text" id="policy-search-input" placeholder="Buscar por asegurado, póliza, compañía..." class="w-full mt-1 block px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
                         <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200">
@@ -279,12 +278,12 @@
                     const formattedDate = courseDate ? courseDate.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' }) : 'N/A';
 
                     row.innerHTML = `
-                        <td class="td">${course.name || 'N/A'}</td>
-                        <td class="td">${course.module || 'N/A'}</td>
-                        <td class="td">${course.part || 'N/A'}</td>
-                        <td class="td">${formattedDate}</td>
-                        <td class="td">${statusBadge}</td>
-                        <td class="td">${formattedPrice}</td>
+                        <td class="td font-medium text-gray-900">${course.name || 'N/A'}</td>
+                        <td class="td text-gray-500">${course.module || 'N/A'}</td>
+                        <td class="td text-gray-500">${course.part || 'N/A'}</td>
+                        <td class="td text-gray-500">${formattedDate}</td>
+                        <td class="td text-gray-500">${statusBadge}</td>
+                        <td class="td text-gray-500">${formattedPrice}</td>
                         <td class="td text-right space-x-2 whitespace-nowrap">
                             <button data-id="${course.id}" class="edit-course-btn btn-edit">Editar</button>
                             <button data-id="${course.id}" class="delete-course-btn btn-delete">Eliminar</button>
@@ -326,8 +325,13 @@
 
         courseStatusFilters.addEventListener('click', (e) => {
             if (e.target.matches('.filter-btn')) {
-                courseStatusFilters.querySelector('.filter-btn-active').classList.remove('filter-btn-active', 'bg-indigo-600', 'text-white');
-                e.target.classList.add('filter-btn-active', 'bg-indigo-600', 'text-white');
+                const activeButton = courseStatusFilters.querySelector('.filter-btn-active');
+                if (activeButton) {
+                    activeButton.classList.remove('filter-btn-active');
+                    activeButton.classList.add('text-gray-600', 'bg-gray-200', 'hover:bg-gray-300');
+                }
+                e.target.classList.add('filter-btn-active');
+                e.target.classList.remove('text-gray-600', 'bg-gray-200', 'hover:bg-gray-300');
                 renderCourses(false);
             }
         });
